@@ -3,189 +3,274 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Loopin Employee Updates</title>
+<title>Remote Opus Client Portal</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Nunito+Sans:wght@400;600;700;800&display=swap">
 <style>
-/* Client view of each Loopin team member's update history (from Yessid's Loom "Client Backlog Updates for Ikra").
-   Layout follows the ChannelDock changelog shown in that video; colours and fonts follow remote-opus.com. */
+/* Client view of each team member's update history (from Yessid's Loom "Client Backlog Updates for Ikra").
+   Timeline layout follows the ChannelDock changelog shown in that video; look and feel follow remote-opus.com. */
 :root{
-  --bg:#f3faf6; --surface:#ffffff; --surface-2:#eef5f1; --fg:#0f2318; --muted:#4f6157; --line:#d6e6dd; --grid:#e6efe9;
-  --brand:#2f7e51; --brand-dark:#1a4731; --brand-tint:#e3ede7; --on-brand:#ffffff;
-  --head-a:#2f7e51; --head-b:#1a4732;
+  --bg:#f6fbf8; --surface:#ffffff; --surface-2:#f1f8f4; --fg:#0f2318; --muted:#56685d; --line:#e1ece5; --line-2:#c8e0d4;
+  --brand:#2f7e51; --brand-dark:#1a4731; --tint:#e3ede7; --on-brand:#ffffff;
+  --hero-a:#eaf5ef; --hero-b:#f6fbf8; --nav:#ffffff;
   --good:#2f7e51; --good-bg:#dff3e7; --bad:#c93b3a; --bad-bg:#fde8e7; --orange:#b45f00; --orange-bg:#ffefdc;
-  --grey:#4f6157; --grey-bg:#eef2ef; --start:#1a4731; --start-bg:#e3ede7; --mark:#cdeedb;
-  --chart-line:#2f7e51;
+  --grey:#56685d; --grey-bg:#eef2ef; --start:#1a4731; --start-bg:#e3ede7; --mark:#cdeedb;
+  --shadow:0 10px 30px rgba(15,35,24,.08); --shadow-sm:0 3px 12px rgba(15,35,24,.05);
   --serif:'DM Serif Display',Georgia,serif;
   --sans:'Nunito Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0c1712; --surface:#13201a; --surface-2:#1a2b22; --fg:#e7f1eb; --muted:#9db3a6; --line:#26392f; --grid:#1f3027;
-  --brand:#3fa36b; --brand-dark:#7ed9a4; --brand-tint:#1a3326; --on-brand:#06120c;
-  --head-a:#1a4731; --head-b:#0f2318;
+  --bg:#0c1712; --surface:#13201a; --surface-2:#182a21; --fg:#e7f1eb; --muted:#9db3a6; --line:#24372d; --line-2:#2c4537;
+  --brand:#3fa36b; --brand-dark:#7ed9a4; --tint:#1a3326; --on-brand:#06120c;
+  --hero-a:#10241a; --hero-b:#0c1712; --nav:#0f1c15;
   --good:#5cc28a; --good-bg:#143524; --bad:#ff8584; --bad-bg:#3d1615; --orange:#ffad4d; --orange-bg:#3a2408;
   --grey:#b3c4ba; --grey-bg:#1f2d26; --start:#a9dcbf; --start-bg:#1a3326; --mark:#285c40;
-  --chart-line:#3fa36b; color-scheme:dark}}
+  --shadow:0 10px 30px rgba(0,0,0,.35); --shadow-sm:0 3px 12px rgba(0,0,0,.25); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0c1712; --surface:#13201a; --surface-2:#1a2b22; --fg:#e7f1eb; --muted:#9db3a6; --line:#26392f; --grid:#1f3027;
-  --brand:#3fa36b; --brand-dark:#7ed9a4; --brand-tint:#1a3326; --on-brand:#06120c;
-  --head-a:#1a4731; --head-b:#0f2318;
+  --bg:#0c1712; --surface:#13201a; --surface-2:#182a21; --fg:#e7f1eb; --muted:#9db3a6; --line:#24372d; --line-2:#2c4537;
+  --brand:#3fa36b; --brand-dark:#7ed9a4; --tint:#1a3326; --on-brand:#06120c;
+  --hero-a:#10241a; --hero-b:#0c1712; --nav:#0f1c15;
   --good:#5cc28a; --good-bg:#143524; --bad:#ff8584; --bad-bg:#3d1615; --orange:#ffad4d; --orange-bg:#3a2408;
   --grey:#b3c4ba; --grey-bg:#1f2d26; --start:#a9dcbf; --start-bg:#1a3326; --mark:#285c40;
-  --chart-line:#3fa36b; color-scheme:dark}
+  --shadow:0 10px 30px rgba(0,0,0,.35); --shadow-sm:0 3px 12px rgba(0,0,0,.25); color-scheme:dark}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;min-height:100vh}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.55;min-height:100vh}
 button{font:inherit;cursor:pointer;color:inherit}
-input{font:inherit;color:var(--fg);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:9px 12px;width:100%}
-input:focus-visible,button:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+input{font:inherit;color:var(--fg);background:var(--surface);border:1.5px solid var(--line-2);border-radius:999px;padding:10px 14px;width:100%}
+input:focus-visible,button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 h1,h2,h3{margin:0;line-height:1.15;text-wrap:balance}
 mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.in{max-width:1160px;margin:0 auto;padding:0 20px}
+.g{color:var(--brand)}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--brand)}
 
-/* Top bar */
-.top{background:linear-gradient(135deg,var(--head-a),var(--head-b));color:#fff;padding:14px 16px}
-.top-in{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.brand{display:flex;align-items:baseline;gap:10px}
-.logo{font-family:var(--serif);font-size:28px;letter-spacing:.2px}
-.brand small{color:rgba(255,255,255,.75);font-size:14px;font-weight:600}
-.company{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;background:rgba(255,255,255,.12);padding:6px 12px;border-radius:999px}
-.company svg{width:16px;height:16px}
+/* Top bar, like remote-opus.com */
+.nav{background:var(--nav);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.nav .in{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:66px;flex-wrap:wrap}
+.wordmark{font-weight:800;font-size:22px;letter-spacing:-.3px;color:var(--brand-dark);text-decoration:none}
+.nav-right{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted);font-weight:600}
+.client-chip{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line-2);border-radius:999px;padding:5px 14px 5px 5px;color:var(--fg);font-weight:700;background:var(--surface)}
+.client-chip i{width:28px;height:28px;border-radius:50%;background:var(--brand-dark);color:#fff;font-style:normal;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
 
-/* Page */
-.wrap{max-width:1100px;margin:0 auto;padding:28px 16px 48px;display:flex;flex-direction:column;gap:16px}
-.head h1{font-family:var(--serif);font-weight:400;font-size:34px}
-.head p{margin:6px 0 0;color:var(--muted);max-width:62ch}
-.hint{color:var(--muted);font-size:14px;margin:0}
+/* Management activity bar: read-only view of what Remote Opus management did with the team */
+.mbar{background:#1a4731;color:#fff;position:relative;z-index:25}
+.mbar .in{display:flex;align-items:center;gap:14px;min-height:46px}
+.live{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;color:#bfe8cf}
+.pulse{position:relative;width:8px;height:8px;border-radius:50%;background:#7ed9a4;flex:none}
+.pulse::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid #7ed9a4;opacity:0;animation:ping 2s ease-out infinite}
+@keyframes ping{0%{transform:scale(.5);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+.mitems{display:flex;gap:6px;flex:1;min-width:0;overflow:hidden;list-style:none;margin:0;padding:0}
+.mitems li{min-width:0;display:flex}
+.mitem .mt{overflow:hidden;text-overflow:ellipsis}
+.mitem{min-width:0;display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:0;border-radius:999px;padding:5px 12px 5px 6px;color:#fff;font-size:13px;font-weight:700;white-space:nowrap}
+.mitem:hover{background:rgba(255,255,255,.16)}
+.mitem small{color:rgba(255,255,255,.7);font-weight:600}
+.mic{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.mic svg{width:13px;height:13px}
+.mitem .mic{background:rgba(255,255,255,.14);color:#bfe8cf}
+.mall{margin-left:auto;display:inline-flex;align-items:center;gap:6px;background:#fff;color:#1a4731;border:0;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:800;white-space:nowrap}
+.mall .chev{width:14px;height:14px;transition:transform .2s}
+.mall[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.mpanel{position:absolute;right:max(20px,calc((100% - 1160px)/2 + 20px));top:calc(100% + 8px);width:min(420px,calc(100% - 40px));max-height:min(70vh,560px);overflow:auto;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:8px}
+.mpanel h4{margin:10px 10px 4px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mrow{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:none;border:0;border-radius:12px;padding:10px}
+.mrow:hover,.mrow:focus-visible{background:var(--surface-2)}
+.mrow b{display:block;font-size:14px}
+.mrow span.t{display:block;font-size:13px;color:var(--muted)}
+.mrow small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.mrow .mic{width:32px;height:32px;margin-top:1px}
+.mrow .mic svg{width:16px;height:16px}
+.k-appreciate{background:var(--good-bg);color:var(--good)} .k-check{background:var(--tint);color:var(--brand-dark)} .k-talk{background:var(--grey-bg);color:var(--grey)}
+.mline{position:relative;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:14px;color:var(--muted)}
+.mline .pulse{background:var(--brand)}
+.mline .pulse::after{border-color:var(--brand)}
+.mline b{color:var(--fg)}
+.mline .sep{opacity:.5}
 
-/* Employees in one line */
-.people{display:flex;gap:10px;flex-wrap:wrap}
-.person{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);background:var(--surface);border-radius:16px;padding:8px 12px 8px 8px;text-align:left;min-width:0;transition:border-color .15s,box-shadow .15s}
-.person:hover{border-color:var(--brand)}
-.person[aria-expanded="true"]{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
-.person b{display:block;font-size:15px}
-.person small{display:block;font-size:12.5px;color:var(--muted)}
-.person .chev{width:16px;height:16px;color:var(--muted);margin-left:6px;transition:transform .2s}
-.person[aria-expanded="true"] .chev{transform:rotate(180deg);color:var(--brand)}
-.av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#2f7e51,#1a4732);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:none}
+/* Hero */
+.hero{background:linear-gradient(180deg,var(--hero-a),var(--hero-b));padding:44px 0 34px}
+.hero .in{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:32px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line-2);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;color:var(--brand-dark)}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand)}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:48px;letter-spacing:-.5px;margin-top:16px}
+.hero p{margin:12px 0 0;color:var(--muted);font-size:16.5px;max-width:54ch}
+.summary{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:20px 22px}
+.summary-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.summary-head b{font-size:15px}
+.summary-head span{font-size:12px;font-weight:700;color:var(--brand-dark);background:var(--tint);border-radius:999px;padding:3px 10px}
+.srow{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.srow .ic{width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex:none}
+.ic.good{background:var(--good-bg);color:var(--good)} .ic.bad{background:var(--bad-bg);color:var(--bad)} .ic.grey{background:var(--grey-bg);color:var(--grey)} .ic.mg{background:var(--tint);color:var(--brand-dark)}
+.srow span{flex:1;color:var(--muted);font-weight:600}
+.srow .ic svg{width:17px;height:17px}
+.srow b{font-size:20px;font-weight:800}
 
-/* Drop-down details */
-.panel{display:flex;flex-direction:column;gap:16px;animation:drop .2s ease-out}
-@keyframes drop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-.hero{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;padding:22px 24px;display:flex;flex-direction:column;gap:18px}
-.hero-top{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
-.hero-main{flex:1 1 300px;min-width:0}
-.eyebrow{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}
-.eyebrow svg{width:14px;height:14px;flex:none}
-.hero h2{font-family:var(--serif);font-weight:400;font-size:34px;margin-top:6px}
-.hero-main p{margin:2px 0 0;color:var(--muted)}
-.stats{display:flex;gap:24px;flex-wrap:wrap}
-.stats div{display:flex;flex-direction:column;align-items:center;min-width:62px}
-.stats b{font-size:24px;font-weight:800}
-.stats span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:center;font-weight:700}
+/* Team switcher: one card per person, one open at a time */
+.main{padding:30px 0 56px}
+.main .in{display:flex;flex-direction:column;gap:22px}
+.sec-head{display:flex;align-items:baseline;gap:10px}
+.sec-head .count{font-size:12px;font-weight:700;color:var(--muted)}
+.team{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:-8px}
+.tab{display:flex;flex-direction:column;gap:12px;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s,border-color .15s}
+.tab:hover{border-color:var(--line-2);transform:translateY(-2px);box-shadow:var(--shadow)}
+.tab-top{display:flex;align-items:center;gap:12px;min-width:0}
+.tab-top div{min-width:0}
+.tab b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab small{display:block;font-size:13px;color:var(--muted)}
+.av{width:44px;height:44px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line-2);color:var(--brand-dark);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex:none}
+.tab-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.tally{display:flex;gap:10px}
+.tally span{display:inline-flex;align-items:center;gap:5px;font-weight:700}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+.dot.green{background:var(--good)} .dot.red{background:var(--bad)} .dot.orange{background:var(--orange)} .dot.grey{background:var(--grey)} .dot.forest{background:var(--start)}
+.tab[aria-selected="true"]{background:linear-gradient(135deg,#2f7e51,#1a4732);border-color:transparent;color:#fff;box-shadow:0 14px 30px rgba(26,71,49,.28);transform:none}
+.tab[aria-selected="true"] small,.tab[aria-selected="true"] .tab-foot{color:rgba(255,255,255,.82)}
+.tab[aria-selected="true"] .tab-foot{border-top-color:rgba(255,255,255,.18)}
+.tab[aria-selected="true"] .av{background:#fff;border-color:#fff;color:#1a4731}
+.tab[aria-selected="true"] .dot.green{background:#7ed9a4} .tab[aria-selected="true"] .dot.red{background:#ff9b9b}
 
-/* Trend chart */
-.trend{border-top:1.5px solid var(--line);padding-top:16px}
-.trend-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-.trend-head h3{font-size:16px;font-weight:800}
-.trend-head p{margin:2px 0 0;font-size:13px;color:var(--muted)}
-.verdict{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px}
-.verdict.up{background:var(--good-bg);color:var(--good)} .verdict.down{background:var(--bad-bg);color:var(--bad)} .verdict.flat{background:var(--grey-bg);color:var(--grey)}
-.chart{position:relative;outline:none;border-radius:8px}
-.chart svg{display:block;width:100%;height:auto;overflow:visible}
-.chart .ax{font-size:11px;fill:var(--muted);font-family:var(--sans);font-variant-numeric:tabular-nums}
-.chart .endlbl{font-size:12px;font-weight:800;fill:var(--fg);font-family:var(--sans)}
-.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;box-shadow:0 8px 24px rgba(15,35,24,.16);font-size:12.5px;min-width:150px;max-width:240px;z-index:5}
-.tip strong{display:block;font-size:15px}
-.tip span{display:block;color:var(--muted)}
-.tableview{margin-top:6px;font-size:13px}
-.tableview summary{cursor:pointer;color:var(--muted);font-weight:700;width:max-content}
-.tableview table{width:100%;border-collapse:collapse;margin-top:8px}
-.tableview th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
-.tableview td{padding:7px 8px;border-bottom:1px solid var(--grid);font-variant-numeric:tabular-nums}
-.tw{overflow-x:auto}
+/* Selected person */
+.profile{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:26px 28px;display:flex;flex-direction:column;gap:22px;animation:fade .2s ease-out}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.who{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.who .av{width:64px;height:64px;border-radius:16px;font-size:20px}
+.who-txt{flex:1;min-width:220px}
+.who h2{font-family:var(--serif);font-weight:400;font-size:36px;margin-top:4px}
+.who p{margin:2px 0 0;color:var(--muted)}
+.started{display:inline-flex;align-items:center;gap:6px}
+.started svg{width:14px;height:14px}
+.fresh{font-size:13px;font-weight:700;color:var(--brand-dark);background:var(--tint);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.stat{background:var(--surface-2);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.stat b{display:block;font-size:28px;font-weight:800;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.stat.good b{color:var(--good)} .stat.bad b{color:var(--bad)}
 
-/* Filters and search */
-.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px}
+/* Updates: filters, search, timeline */
+#details{display:flex;flex-direction:column;gap:18px}
+.upd-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-top:12px}
+.upd-head h2{font-family:var(--serif);font-weight:400;font-size:30px;margin-top:4px}
+.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line-2);background:var(--surface);border-radius:999px;padding:8px 15px;font-weight:700;font-size:13px}
 .chip:hover{border-color:var(--brand)}
-.chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.chip[aria-pressed="true"]{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff}
+:root[data-theme="dark"] .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}}
 .chip span{margin-left:6px;opacity:.75;font-weight:600}
 .fwrap{position:relative}
 .chip.fbtn{display:inline-flex;align-items:center;gap:6px}
 .fbtn svg{width:15px;height:15px;flex:none}
-.fbtn .chev2{width:14px;height:14px;opacity:.75}
-.fmenu{position:absolute;top:calc(100% + 6px);left:0;z-index:20;min-width:230px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 32px rgba(15,35,24,.16);padding:6px;display:flex;flex-direction:column}
+.fbtn .chev{width:14px;height:14px;opacity:.75}
+.fmenu{position:absolute;top:calc(100% + 6px);left:0;z-index:20;min-width:230px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:6px;display:flex;flex-direction:column}
 .fmenu button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:9px 10px;border-radius:9px;font-weight:700;font-size:13px;text-align:left}
 .fmenu button:hover,.fmenu button:focus-visible{background:var(--surface-2)}
-.fmenu .dot{width:9px;height:9px;border-radius:50%;flex:none}
-.dot.red{background:var(--bad)} .dot.green{background:var(--good)} .dot.orange{background:var(--orange)} .dot.grey{background:var(--grey)} .dot.forest{background:var(--start)}
 .fmenu .n{margin-left:auto;color:var(--muted);font-weight:600}
 .fmenu .tick{width:14px;color:var(--brand);font-weight:800}
-.search{position:relative;flex:0 1 320px;min-width:220px}
-.search svg{position:absolute;left:12px;top:50%;width:16px;height:16px;margin-top:-8px;color:var(--muted);pointer-events:none}
-.search input{padding-left:36px}
+.search{position:relative;width:280px}
+.search svg{position:absolute;left:13px;top:50%;width:16px;height:16px;margin-top:-8px;color:var(--muted);pointer-events:none}
+.search input{padding-left:38px}
 
-/* Timeline */
 .tl{display:flex;flex-direction:column;gap:14px}
 .month{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:4px 0 10px}
 .day{display:grid;grid-template-columns:150px 36px minmax(0,1fr);grid-template-areas:"date rail cards"}
-.day-date{grid-area:date;text-align:right;padding-top:14px}
+.day-date{grid-area:date;text-align:right;padding-top:16px}
 .day-date b{display:block;font-size:16px;font-weight:800}
 .day-date span{font-size:12px;color:var(--muted)}
 .rail{grid-area:rail;position:relative;display:flex;justify-content:center}
-.rail::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:var(--brand);opacity:.45}
-.day.first .rail::before{top:22px}
-.day.last .rail::before{bottom:auto;height:22px}
+.rail::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:var(--brand);opacity:.4}
+.day.first .rail::before{top:24px}
+.day.last .rail::before{bottom:auto;height:24px}
 .day.first.last .rail::before{display:none}
-.rail i{position:relative;margin-top:16px;width:14px;height:14px;border-radius:50%;border:2px solid var(--brand);background:var(--bg);z-index:1}
+.rail i{position:relative;margin-top:18px;width:14px;height:14px;border-radius:50%;border:2px solid var(--brand);background:var(--bg);z-index:1}
 .cards{grid-area:cards;display:flex;flex-direction:column;gap:12px;padding:4px 0 22px;min-width:0}
 .day.last .cards{padding-bottom:4px}
-.entry{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:16px 20px}
-.entry.planned{border-style:dashed;background:transparent}
+.entry{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 22px;box-shadow:var(--shadow-sm)}
+.entry.planned{border:1.5px dashed var(--line-2);background:transparent;box-shadow:none}
 .labels{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .label{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
 .label.red{background:var(--bad-bg);color:var(--bad)} .label.green{background:var(--good-bg);color:var(--good)} .label.orange{background:var(--orange-bg);color:var(--orange)} .label.grey{background:var(--grey-bg);color:var(--grey)} .label.forest{background:var(--start-bg);color:var(--start)}
-.label.plain{background:none;border:1px solid var(--line);color:var(--muted)}
+.label.plain{background:none;border:1px solid var(--line-2);color:var(--muted)}
 .entry h3{font-size:17px;font-weight:800;overflow-wrap:anywhere}
-.entry p{margin:6px 0 0;color:var(--muted);line-height:1.6;max-width:80ch;overflow-wrap:anywhere;white-space:pre-line}
+.entry p{margin:6px 0 0;color:var(--muted);line-height:1.65;max-width:80ch;overflow-wrap:anywhere;white-space:pre-line}
 .files{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.file{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--surface-2);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:700;max-width:100%}
+.file{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line-2);background:var(--surface-2);border-radius:12px;padding:7px 12px;font-size:13px;font-weight:700;max-width:100%}
 .file:hover{border-color:var(--brand)}
 .file svg{width:15px;height:15px;color:var(--brand);flex:none}
 .file span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.file small{color:var(--muted);font-weight:600}
-.meta{font-size:12px;color:var(--muted);margin-top:12px}
-.empty{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;color:var(--muted);text-align:center;padding:28px 20px}
+.file small{color:var(--muted);font-weight:700;font-size:11px;background:var(--surface);border-radius:6px;padding:1px 6px}
+.meta{font-size:12.5px;color:var(--muted);margin-top:12px}
+.empty{background:var(--surface);border:1px solid var(--line);border-radius:18px;color:var(--muted);text-align:center;padding:30px 20px}
+.foot{text-align:center;font-size:12.5px;color:var(--muted);padding:6px 0 0}
 
-@media (max-width:700px){
-  .head h1{font-size:28px}
-  .hero{padding:18px}
-  .hero h2{font-size:28px}
-  .stats{gap:14px}
-  .search{flex:1 1 100%}
+@media (max-width:900px){
+  .hero .in{grid-template-columns:1fr}
+  .hero h1{font-size:38px}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .nav-right .lbl{display:none}
+  .mitems li+li{display:none}
+  .live .txt{display:none}
+  .stats .stat:last-child{grid-column:span 2}
+  .mitems li:first-child{flex:1}
+  .mitem small{display:none}
+  .mline{flex-direction:column;align-items:flex-start;gap:2px}
+  .mline .sep{display:none}
+  .mline .pulse{position:absolute;left:14px;top:17px}
+  .mline b{padding-left:16px}
+  .hero{padding:30px 0 24px}
+  .hero h1{font-size:32px}
+  /* Team cards scroll sideways on phones so switching stays one tap */
+  .team{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 10px;margin:-8px -20px 0;padding-left:20px;padding-right:20px}
+  .tab{flex:0 0 78%;scroll-snap-align:start}
+  .profile{padding:20px 18px}
+  .who h2{font-size:30px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .search{width:100%}
   .day{grid-template-columns:22px minmax(0,1fr);grid-template-areas:"rail date" "rail cards";column-gap:10px}
   .day-date{text-align:left;padding-top:8px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
   .rail i{margin-top:12px}
   .day.first .rail::before{top:18px}
   .day.last .rail::before{height:18px}
-  .entry{padding:14px 16px}
+  .entry{padding:15px 16px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<header class="top">
-  <div class="top-in">
-    <div class="brand"><span class="logo">Loopin</span><small>Employee updates</small></div>
-    <div class="company"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1M14 9h1M9 13h1M14 13h1M9 17h1M14 17h1"/></svg><span id="companyName"></span></div>
+<header class="nav">
+  <div class="in">
+    <span class="wordmark">Remote Opus</span>
+    <div class="nav-right"><span class="lbl">Client portal</span><span class="client-chip"><i id="clientIni"></i><span id="clientName"></span></span></div>
   </div>
 </header>
-<main class="wrap" id="app"></main>
-<div class="sr" id="live" aria-live="polite"></div>
+
+<div class="mbar" aria-label="Management activity">
+  <div class="in">
+    <span class="live"><span class="pulse" aria-hidden="true"></span><span class="txt">Management activity</span></span>
+    <ul class="mitems" id="mitems"></ul>
+    <button type="button" class="mall" id="mall" aria-expanded="false" aria-controls="mpanel" onclick="toggleMgmt()">All activity <span id="mcount"></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+  </div>
+  <div class="mpanel" id="mpanel" role="region" aria-label="All management activity" hidden></div>
+</div>
+
+<section class="hero">
+  <div class="in">
+    <div>
+      <span class="pill">Remote Opus client portal</span>
+      <h1>Your team at <span class="g">Remote Opus</span></h1>
+      <p>Every update about the people working for you, from their first day: great work, warnings, conversations, probation reviews and files.</p>
+    </div>
+    <aside class="summary" aria-label="Last 30 days" id="summary"></aside>
+  </div>
+</section>
+
+<main class="main">
+  <div class="in" id="app"></div>
+</main>
 
 <script>
 // ---------- Settings ----------
@@ -204,12 +289,11 @@ const ICON={
   clip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 11-8.6 8.6a5 5 0 0 1-7-7l8.5-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/></svg>',
   funnel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>',
   chev:'<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>',
-  chev2:'<svg class="chev2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>',
 };
 
 // ---------- Example data ----------
 // Ikra follows Yessid's Loom (started 10 September, YouTube warning, great work, probation review).
-// Hamza, Sara and Bilal are invented examples so the trend line shows going up, recovering and going down.
+// Hamza, Sara and Bilal are invented examples.
 const EMPLOYEES=[
   {id:'ikra',name:'Ikra',role:'Virtual Assistant',start:'2026-09-10'},
   {id:'hamza',name:'Hamza Ali',role:'Shopify Developer',start:'2026-05-04'},
@@ -248,19 +332,38 @@ const ENTRIES=[
   {emp:'bilal',type:'probation',date:'2026-10-09',title:'Probation review conversation',text:'Planned: deadlines, brand guide, and whether probation continues.'},
 ].map((x,i)=>({...x,id:'u'+i,files:x.files||[]}));
 
+// What Remote Opus management did with each person (written in our own portal, shown here read-only).
+// Example data: "ago" is days before today, so the example always looks current.
+const MGMT_KINDS={
+  appreciate:{label:'Appreciation',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>'},
+  check:{label:'Check-in',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'},
+  talk:{label:'One-to-one',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>'},
+};
+const MGMT=[
+  {ago:0,emp:'ikra',kind:'check',title:'Checked Ikra’s work and hours',text:'All of today’s tasks are on track.'},
+  {ago:0,emp:'hamza',kind:'appreciate',title:'Appreciated Hamza',text:'For the new product page template.'},
+  {ago:1,emp:'bilal',kind:'talk',title:'One-to-one with Bilal',text:'Deadlines: he now warns a day ahead when something will be late.'},
+  {ago:2,emp:'sara',kind:'appreciate',title:'Appreciated Sara',text:'For the 5-star review a customer wrote about her.'},
+  {ago:3,emp:'sara',kind:'check',title:'Checked Sara’s reply times',text:'Average 1 hour 35 minutes, under the 2-hour target.'},
+  {ago:4,emp:'bilal',kind:'check',title:'Checked Bilal’s designs',text:'All new posts follow the brand guide.'},
+  {ago:6,emp:'ikra',kind:'talk',title:'Weekly one-to-one with Ikra',text:'Going well. She now asks for the next task when she is free.'},
+  {ago:8,emp:'ikra',kind:'appreciate',title:'Appreciated Ikra',text:'For finding a problem nobody had noticed.'},
+  {ago:9,emp:'hamza',kind:'check',title:'Checked Hamza’s daily updates',text:'Sent every working day this month.'},
+  {ago:12,emp:'sara',kind:'talk',title:'One-to-one with Sara',text:'Preparation for her probation review.'},
+].map((x,i)=>({...x,id:'m'+i,by:'Floor manager'}));
+
 // ---------- Helpers ----------
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const pad=n=>String(n).padStart(2,'0');
-const isoToday=()=>{const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
-const toDate=d=>new Date(d+'T00:00:00');
 const isoOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const isoToday=()=>isoOf(new Date());
+const toDate=d=>new Date(d+'T00:00:00');
 const diffDays=(a,b)=>Math.round((toDate(a)-toDate(b))/86400000);
 const fmt=(d,o)=>toDate(d).toLocaleDateString('en-GB',o);
-const short=d=>`${+d.slice(8,10)} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+d.slice(5,7)-1]}`;
 const ini=n=>String(n).trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
 const ago=n=>n===0?'today':n===1?'yesterday':`${n} days ago`;
-const signed=n=>n>0?'+'+n:n<0?'−'+Math.abs(n):'0';
+const plural=(n,w,p)=>`${n} ${n===1?w:(p||w+'s')}`;
 const emp=id=>EMPLOYEES.find(e=>e.id===id);
 const entriesOf=id=>ENTRIES.filter(x=>x.emp===id);
 function lastUpdate(id){const t=isoToday();const ds=entriesOf(id).map(x=>x.date).filter(d=>d<=t).sort();return ds.length?ds[ds.length-1]:null}
@@ -287,33 +390,46 @@ function openFile(entryId,i){
   setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
 
-// ---------- Trend: +1 for each Great work, −1 for each Warning ----------
-function trendPoints(e){
-  const t=isoToday();let s=0;
-  const pts=[{date:e.start,score:0,kind:'start',title:'Started'}];
-  entriesOf(e.id).filter(x=>x.date<=t&&(x.type==='great'||x.type==='warning')).sort((a,b)=>a.date.localeCompare(b.date)).forEach(x=>{s+=x.type==='great'?1:-1;pts.push({date:x.date,score:s,kind:x.type,title:x.title})});
-  if(pts[pts.length-1].date<t)pts.push({date:t,score:s,kind:'now',title:'Today'});
-  return pts;
-}
-function scoreAt(pts,d){let s=0;pts.forEach(p=>{if(p.date<=d)s=p.score});return s}
-function verdict(e){
-  const pts=trendPoints(e);const t=isoToday();
-  const from=isoOf(new Date(toDate(t).getTime()-30*86400000));const base=from<e.start?e.start:from;
-  const before=from<e.start?0:scoreAt(pts,base);const now=pts[pts.length-1].score;const d=now-before;
-  return {pts,now,d,cls:d>0?'up':d<0?'down':'flat',text:d>0?`▲ Going up · ${signed(d)} in the last 30 days`:d<0?`▼ Going down · ${signed(d)} in the last 30 days`:'● Steady · no change in the last 30 days'};
-}
+// ---------- View state: one person open at a time (first by default, or the one in the link) ----------
+const UI={open:(EMPLOYEES.find(e=>'#'+e.id===location.hash)||EMPLOYEES[0]).id,type:'',q:''};
+function pick(id,focus){if(UI.open===id)return;UI.open=id;UI.type='';UI.q='';try{history.replaceState(null,'','#'+id)}catch(e){}render();if(focus){const t=document.getElementById('tab-'+id);t&&t.focus()}}
+// Keep the selected card visible in the sideways-scrolling team row on phones
+function revealTab(){const t=document.getElementById('tab-'+UI.open),row=t&&t.parentElement;if(row&&row.scrollWidth>row.clientWidth)row.scrollLeft=t.offsetLeft-row.offsetLeft-20}
 
-// ---------- View state ----------
-const UI={open:null,type:'',q:''};
-function toggleEmp(id){UI.open=UI.open===id?null:id;UI.type='';UI.q='';render();if(UI.open){const p=$('#panel');p&&p.scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}}
-function setType(t){UI.type=t;render()}
-function setQ(v){UI.q=v;const e=emp(UI.open);if(e)$('#tl').innerHTML=timelineHTML(e)}
+// ---------- Management activity ----------
+const mDate=m=>isoOf(new Date(toDate(isoToday()).getTime()-m.ago*86400000));
+const mWhen=m=>m.ago===0?'today':m.ago===1?'yesterday':`${m.ago} days ago`;
+const mgmtOf=id=>MGMT.filter(m=>m.emp===id).sort((a,b)=>a.ago-b.ago);
+function mgmtBar(){
+  const list=MGMT.slice().sort((a,b)=>a.ago-b.ago);
+  $('#mitems').innerHTML=list.slice(0,3).map(m=>`<li><button type="button" class="mitem" onclick="openFromMgmt('${m.emp}')"><span class="mic">${MGMT_KINDS[m.kind].icon}</span><span class="mt">${esc(m.title)}</span><small>· ${mWhen(m)}</small></button></li>`).join('');
+  $('#mcount').textContent=`(${list.length})`;
+  const groups=[['Today',m=>m.ago===0],['Yesterday',m=>m.ago===1],['This week',m=>m.ago>1&&m.ago<7],['Earlier',m=>m.ago>=7]];
+  $('#mpanel').innerHTML=groups.map(([h,f])=>{const g=list.filter(f);return g.length?`<h4>${h}</h4>`+g.map(m=>`<button type="button" class="mrow" onclick="openFromMgmt('${m.emp}')"><span class="mic k-${m.kind}">${MGMT_KINDS[m.kind].icon}</span><span><b>${esc(m.title)}</b><span class="t">${esc(m.text)}</span><small>${MGMT_KINDS[m.kind].label} · ${esc(m.by)} · ${mWhen(m)}</small></span></button>`).join(''):''}).join('');
+}
+function toggleMgmt(open){const p=$('#mpanel'),b=$('#mall');open=open===undefined?p.hidden:open;p.hidden=!open;b.setAttribute('aria-expanded',String(open));if(open){const r=p.querySelector('.mrow');r&&r.focus()}}
+function openFromMgmt(id){toggleMgmt(false);pick(id);revealTab();const d=$('#details');d&&d.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
+function setType(t){UI.type=t;renderDetails()}
+function setQ(v){UI.q=v;$('#tl').innerHTML=timelineHTML(emp(UI.open))}
 
 // ---------- Rendering ----------
+function summaryHTML(){
+  const t=isoToday(),from=isoOf(new Date(toDate(t).getTime()-30*86400000));
+  const recent=ENTRIES.filter(x=>x.date>from&&x.date<=t);const c=k=>recent.filter(x=>x.type===k).length;
+  return `<div class="summary-head"><b>Last 30 days</b><span>${plural(EMPLOYEES.length,'person','people')}</span></div>
+  <div class="srow"><span class="ic good" aria-hidden="true">▲</span><span>Great work</span><b>${c('great')}</b></div>
+  <div class="srow"><span class="ic bad" aria-hidden="true">!</span><span>Warnings</span><b>${c('warning')}</b></div>
+  <div class="srow"><span class="ic grey" aria-hidden="true">✎</span><span>All updates</span><b>${recent.length}</b></div>
+  <div class="srow"><span class="ic mg" aria-hidden="true">${MGMT_KINDS.check.icon}</span><span class="lbl">Management actions</span><b>${MGMT.filter(m=>m.ago<30).length}</b></div>`;
+}
+function tabHTML(p){
+  const t=isoToday();const lu=lastUpdate(p.id);const d=lu?diffDays(t,lu):null;const all=entriesOf(p.id);const g=all.filter(x=>x.type==='great').length,w=all.filter(x=>x.type==='warning').length;const on=UI.open===p.id;
+  return `<button type="button" class="tab" role="tab" id="tab-${p.id}" aria-selected="${on}" aria-controls="details" tabindex="${on?0:-1}" onclick="pick('${p.id}')"><span class="tab-top"><span class="av">${esc(ini(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.role)}</small></span></span><span class="tab-foot"><span>${d===null?'No updates yet':'Updated '+ago(d)}</span><span class="tally"><span title="Great work"><i class="dot green"></i>${g}</span><span title="Warnings"><i class="dot red"></i>${w}</span></span></span></button>`;
+}
 function entryHTML(x){
   const T=TYPES[x.type]||TYPES.update;const planned=x.date>isoToday();
-  const files=x.files.length?`<div class="files">${x.files.map((f,i)=>`<button type="button" class="file" onclick="openFile('${x.id}',${i})" title="Open ${esc(f.name)}">${ICON.clip}<span>${hl(f.name)}</span><small>${f.pdf?'PDF':'Excel'}</small></button>`).join('')}</div>`:'';
-  return `<article class="entry${planned?' planned':''}"><div class="labels"><span class="label ${T.cls}">${T.label}</span>${planned?'<span class="label plain">Planned</span>':''}</div><h3>${hl(x.title)}</h3>${x.text?`<p>${hl(x.text)}</p>`:''}${files}<div class="meta">by Loopin team</div></article>`;
+  const files=x.files.length?`<div class="files">${x.files.map((f,i)=>`<button type="button" class="file" onclick="openFile('${x.id}',${i})" title="Open ${esc(f.name)}">${ICON.clip}<span>${hl(f.name)}</span><small>${f.pdf?'PDF':'EXCEL'}</small></button>`).join('')}</div>`:'';
+  return `<article class="entry${planned?' planned':''}"><div class="labels"><span class="label ${T.cls}">${T.label}</span>${planned?'<span class="label plain">Planned</span>':''}</div><h3>${hl(x.title)}</h3>${x.text?`<p>${hl(x.text)}</p>`:''}${files}<div class="meta">by Remote Opus</div></article>`;
 }
 function timelineHTML(e){
   let list=entriesOf(e.id);
@@ -327,96 +443,53 @@ function timelineHTML(e){
   const dayLabel=d=>{const n=diffDays(d,e.start);return n<0?'':n===0?'Day 0 · started':`Day ${n}${d>today?' · planned':''}`};
   return months.map(M=>`<section aria-label="${fmt(M.m+'-01',{month:'long',year:'numeric'})}"><div class="month">${fmt(M.m+'-01',{month:'long',year:'numeric'})}</div>${M.days.map((D,i)=>`<div class="day${i===0?' first':''}${i===M.days.length-1?' last':''}"><div class="day-date"><b>${fmt(D.d,{day:'numeric',month:'long'})}</b><span>${dayLabel(D.d)}</span></div><div class="rail"><i></i></div><div class="cards">${D.items.map(entryHTML).join('')}</div></div>`).join('')}</section>`).join('');
 }
-function panelHTML(e){
+function detailsHTML(e){
   const all=entriesOf(e.id);const cnt=t=>all.filter(x=>x.type===t).length;
   const today=isoToday();const dn=diffDays(today,e.start);const lu=lastUpdate(e.id);const sd=lu?diffDays(today,lu):null;
-  const v=verdict(e);
   const counts={};all.forEach(x=>counts[x.type]=(counts[x.type]||0)+1);
   const menu=ORDER.map(k=>`<button type="button" role="menuitemradio" aria-checked="${UI.type===k}" onclick="setType('${k}')"><span class="tick">${UI.type===k?'✓':''}</span><span class="dot ${TYPES[k].cls}"></span>${TYPES[k].label}<span class="n">${counts[k]||0}</span></button>`).join('');
-  const rows=v.pts.map((p,i)=>{const ch=i===0||p.kind==='now'?'':signed(p.score-v.pts[i-1].score);const what=p.kind==='start'?'Started (day zero)':p.kind==='now'?'Today':`${TYPES[p.kind].label}: ${p.title}`;return `<tr><td>${short(p.date)}</td><td>${esc(what)}</td><td>${ch}</td><td>${signed(p.score)}</td></tr>`}).join('');
-  return `<section class="panel" id="panel" aria-label="${esc(e.name)}">
-  <div class="hero"><div class="hero-top"><div class="hero-main"><div class="eyebrow">${ICON.cal}${dn>=0?`Started ${fmt(e.start,{day:'numeric',month:'long',year:'numeric'})} · Day ${dn}`:`Starts ${fmt(e.start,{day:'numeric',month:'long',year:'numeric'})}`}</div><h2>${esc(e.name)}</h2><p>${esc(e.role)} at ${esc(CLIENT)}</p></div>
-  <div class="stats"><div><b>${Math.max(0,dn)}</b><span>Days with us</span></div><div><b>${cnt('great')}</b><span>Great work</span></div><div><b>${cnt('warning')}</b><span>Warnings</span></div><div><b>${all.length}</b><span>Updates</span></div><div><b>${sd===null?'–':sd===0?'Today':sd+'d'}</b><span>${sd===null||sd===0?'Last update':'Since last update'}</span></div></div></div>
-  <div class="trend"><div class="trend-head"><div><h3>Performance trend</h3><p>Starts at 0 on day zero. Each Great work moves the line up 1, each Warning moves it down 1.</p></div><span class="verdict ${v.cls}">${v.text}</span></div>
-  <div class="chart" id="chart" tabindex="0" aria-label="Performance trend for ${esc(e.name)}: now ${signed(v.now)}. ${esc(v.text.replace(/^[▲▼●]\s*/,''))}. Use the left and right arrow keys to step through the points."></div>
-  <details class="tableview"><summary>Show as a table</summary><div class="tw"><table><thead><tr><th>Date</th><th>What happened</th><th>Change</th><th>Score</th></tr></thead><tbody>${rows}</tbody></table></div></details></div></div>
-  <div class="bar"><div class="chips" role="group" aria-label="Filter by type"><button type="button" class="chip" aria-pressed="${!UI.type}" onclick="setType('')">All<span>${all.length}</span></button><div class="fwrap"><button type="button" class="chip fbtn" id="fbtn" aria-pressed="${!!UI.type}" aria-haspopup="menu" aria-expanded="false" aria-controls="fmenu" onclick="toggleMenu()">${ICON.funnel}${UI.type?`${TYPES[UI.type].label}<span>${counts[UI.type]||0}</span>`:'Filter'}${ICON.chev2}</button><div class="fmenu" id="fmenu" role="menu" aria-label="Filter by type" hidden>${menu}</div></div></div>
-  <div class="search">${ICON.search}<input id="q" type="search" placeholder="Search what happened…" value="${esc(UI.q)}" oninput="setQ(this.value)" aria-label="Search what happened"></div></div>
-  <div class="tl" id="tl">${timelineHTML(e)}</div></section>`;
+  return `<section class="profile" aria-labelledby="who-name">
+    <div class="who"><span class="av">${esc(ini(e.name))}</span><div class="who-txt"><div class="eyebrow started">${ICON.cal}${dn>=0?`Started ${fmt(e.start,{day:'numeric',month:'long',year:'numeric'})} · Day ${dn}`:`Starts ${fmt(e.start,{day:'numeric',month:'long',year:'numeric'})}`}</div><h2 id="who-name">${esc(e.name)}</h2><p>${esc(e.role)} at ${esc(CLIENT)}</p></div><span class="fresh">${sd===null?'No updates yet':'Last update '+ago(sd)}</span></div>
+    ${(()=>{const ms=mgmtOf(e.id);if(!ms.length)return '';const last=ms[0];const ap=ms.filter(m=>m.kind==='appreciate'&&m.ago<30).length;const ck=ms.filter(m=>m.kind==='check').sort((a,b)=>a.ago-b.ago)[0];
+      return `<div class="mline"><span class="pulse" aria-hidden="true"></span><b>Management</b><span>${esc(last.title)} · ${mWhen(last)}</span><span class="sep">|</span><span>${ck?'Last check-in '+mWhen(ck):'No check-in yet'}</span><span class="sep">|</span><span>${plural(ap,'appreciation')} in the last 30 days</span></div>`})()}
+    <div class="stats"><div class="stat"><b>${Math.max(0,dn)}</b><span>Days with us</span></div><div class="stat good"><b>${cnt('great')}</b><span>Great work</span></div><div class="stat bad"><b>${cnt('warning')}</b><span>Warnings</span></div><div class="stat"><b>${all.length}</b><span>Updates</span></div><div class="stat"><b>${sd===null?'–':sd===0?'Today':sd+'d'}</b><span>Since last update</span></div></div>
+  </section>
+  <div class="upd-head"><div><div class="eyebrow">Updates</div><h2>What happened</h2></div>
+    <div class="tools"><button type="button" class="chip" aria-pressed="${!UI.type}" onclick="setType('')">All<span>${all.length}</span></button><div class="fwrap"><button type="button" class="chip fbtn" id="fbtn" aria-pressed="${!!UI.type}" aria-haspopup="menu" aria-expanded="false" aria-controls="fmenu" onclick="toggleMenu()">${ICON.funnel}${UI.type?`${TYPES[UI.type].label}<span>${counts[UI.type]||0}</span>`:'Filter'}${ICON.chev}</button><div class="fmenu" id="fmenu" role="menu" aria-label="Filter by type" hidden>${menu}</div></div>
+    <div class="search">${ICON.search}<input id="q" type="search" placeholder="Search what happened…" value="${esc(UI.q)}" oninput="setQ(this.value)" aria-label="Search what happened"></div></div></div>
+  <div class="tl" id="tl">${timelineHTML(e)}</div>`;
 }
+function renderDetails(){$('#details').innerHTML=detailsHTML(emp(UI.open))}
 function render(){
-  $('#companyName').textContent=CLIENT;
-  const today=isoToday();
-  const people=`<div class="people" aria-label="Your team">${EMPLOYEES.map(p=>{const lu=lastUpdate(p.id);const d=lu?diffDays(today,lu):null;return `<button type="button" class="person" aria-expanded="${UI.open===p.id}" aria-controls="panel" onclick="toggleEmp('${p.id}')"><span class="av">${esc(ini(p.name))}</span><span><b>${esc(p.name)}</b><small>${d===null?'No updates yet':'Last update '+ago(d)}</small></span>${ICON.chev}</button>`}).join('')}</div>`;
-  const e=emp(UI.open);
-  $('#app').innerHTML=`<div class="head"><h1>Your Loopin team</h1><p>What happened with each person since their first day. Click a name to see their updates, trend and files.</p></div>`+people+(e?panelHTML(e):'<p class="hint">Click a team member above to open their details.</p>');
-  if(e)drawChart(e);
-}
-
-// ---------- Chart (SVG, one series) ----------
-let CH=null;
-function drawChart(e){
-  const box=$('#chart');if(!box)return;
-  const v=verdict(e);const pts=v.pts;
-  const W=Math.max(280,box.clientWidth),H=210,m={l:34,r:70,t:14,b:30};
-  const x0=toDate(e.start).getTime(),x1=Math.max(toDate(isoToday()).getTime(),x0+86400000);
-  const X=d=>m.l+(toDate(d).getTime()-x0)/(x1-x0)*(W-m.l-m.r);
-  const ys=pts.map(p=>p.score);const lo=Math.min(-1,...ys),hi=Math.max(1,...ys);
-  const Y=s=>m.t+(hi-s)/(hi-lo)*(H-m.t-m.b);
-  const step=Math.max(1,Math.ceil((hi-lo)/5));
-  let g='';
-  for(let s=Math.ceil(lo/step)*step;s<=hi;s+=step){g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(s)}" y2="${Y(s)}" stroke="var(${s===0?'--line':'--grid'})" stroke-width="1"/><text class="ax" x="${m.l-8}" y="${Y(s)+4}" text-anchor="end">${signed(s)}</text>`}
-  const mid=isoOf(new Date((x0+x1)/2));
-  g+=`<text class="ax" x="${X(e.start)}" y="${H-8}" text-anchor="start">${short(e.start)}</text><text class="ax" x="${X(mid)}" y="${H-8}" text-anchor="middle">${short(mid)}</text><text class="ax" x="${W-m.r}" y="${H-8}" text-anchor="end">Today</text>`;
-  const path=pts.map((p,i)=>`${i?'L':'M'}${X(p.date).toFixed(1)} ${Y(p.score).toFixed(1)}`).join(' ');
-  const mk=p=>{const x=X(p.date),y=Y(p.score);
-    if(p.kind==='great')return `<path d="M${x} ${y-7}L${x+6.5} ${y+4.5}L${x-6.5} ${y+4.5}Z" fill="var(--good)" stroke="var(--surface)" stroke-width="2" stroke-linejoin="round"/>`;
-    if(p.kind==='warning')return `<path d="M${x} ${y+7}L${x+6.5} ${y-4.5}L${x-6.5} ${y-4.5}Z" fill="var(--bad)" stroke="var(--surface)" stroke-width="2" stroke-linejoin="round"/>`;
-    return `<circle cx="${x}" cy="${y}" r="4.5" fill="${p.kind==='start'?'var(--muted)':'var(--chart-line)'}" stroke="var(--surface)" stroke-width="2"/>`};
-  const last=pts[pts.length-1];
-  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">${g}<path d="${path}" fill="none" stroke="var(--chart-line)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><line id="xh" y1="${m.t}" y2="${H-m.b}" stroke="var(--muted)" stroke-width="1" opacity="0"/>${pts.map(mk).join('')}<circle id="hot" r="7" fill="none" stroke="var(--chart-line)" stroke-width="2" opacity="0"/><text class="endlbl" x="${X(last.date)+10}" y="${Y(last.score)+4}">Now ${signed(last.score)}</text><rect id="hit" x="${m.l-10}" y="0" width="${W-m.l-m.r+20}" height="${H}" fill="transparent"/></svg><div class="tip" id="tip" hidden></div>`;
-  CH={pts,X,Y,i:-1,box};
-  const hit=box.querySelector('#hit');
-  hit.addEventListener('pointermove',ev=>{const r=box.getBoundingClientRect();const px=(ev.clientX-r.left)*(W/r.width);let best=0;pts.forEach((p,i)=>{if(Math.abs(X(p.date)-px)<Math.abs(X(pts[best].date)-px))best=i});showPoint(best)});
-  hit.addEventListener('pointerleave',()=>showPoint(-1));
-}
-function showPoint(i){
-  if(!CH)return;const {pts,X,Y,box}=CH;CH.i=i;
-  const xh=box.querySelector('#xh'),hot=box.querySelector('#hot'),tip=box.querySelector('#tip');
-  if(i<0){xh.setAttribute('opacity','0');hot.setAttribute('opacity','0');tip.hidden=true;return}
-  const p=pts[i],x=X(p.date),y=Y(p.score);
-  xh.setAttribute('x1',x);xh.setAttribute('x2',x);xh.setAttribute('opacity','.5');
-  hot.setAttribute('cx',x);hot.setAttribute('cy',y);hot.setAttribute('opacity','1');
-  tip.textContent='';
-  const strong=document.createElement('strong');strong.textContent='Score '+signed(p.score);
-  const when=document.createElement('span');when.textContent=short(p.date)+' · '+(p.kind==='start'?'Started (day zero)':p.kind==='now'?'Today':TYPES[p.kind].label);
-  tip.append(strong,when);
-  if(p.kind==='great'||p.kind==='warning'){const t=document.createElement('span');t.textContent=p.title;tip.append(t)}
-  tip.hidden=false;
-  const svg=box.querySelector('svg');const sc=box.clientWidth/svg.viewBox.baseVal.width;
-  let left=x*sc+12,top=y*sc-tip.offsetHeight-10;
-  if(left+tip.offsetWidth>box.clientWidth)left=x*sc-tip.offsetWidth-12;
-  if(top<0)top=y*sc+12;
-  tip.style.left=Math.max(0,left)+'px';tip.style.top=top+'px';
-  $('#live').textContent=strong.textContent+', '+when.textContent+(p.kind==='great'||p.kind==='warning'?', '+p.title:'');
+  $('#clientName').textContent=CLIENT;$('#clientIni').textContent=ini(CLIENT);
+  $('#summary').innerHTML=summaryHTML();
+  $('#app').innerHTML=`<div class="sec-head"><span class="eyebrow">Your team</span><span class="count">${plural(EMPLOYEES.length,'person','people')} · click a card to switch</span></div>
+  <div class="team" role="tablist" aria-label="Your team">${EMPLOYEES.map(tabHTML).join('')}</div>
+  <div id="details" role="tabpanel" aria-labelledby="tab-${UI.open}"></div>
+  <p class="foot">Remote Opus · Client portal · Example data</p>`;
+  renderDetails();
 }
 
 // ---------- Events ----------
 function toggleMenu(open){const m=$('#fmenu'),b=$('#fbtn');if(!m)return;open=open===undefined?m.hidden:open;m.hidden=!open;b.setAttribute('aria-expanded',String(open));if(open){const first=m.querySelector('[aria-checked="true"]')||m.querySelector('button');first&&first.focus()}}
-document.addEventListener('click',ev=>{if(!ev.target.closest('.fwrap'))toggleMenu(false)});
+document.addEventListener('click',ev=>{if(!ev.target.closest('.fwrap'))toggleMenu(false);if(!ev.target.closest('.mbar'))toggleMgmt(false)});
 document.addEventListener('keydown',ev=>{
+  if(ev.key==='Escape'&&!$('#mpanel').hidden){toggleMgmt(false);$('#mall').focus();return}
   const m=$('#fmenu');
   if(m&&!m.hidden){
     if(ev.key==='Escape'){toggleMenu(false);$('#fbtn').focus()}
     if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){ev.preventDefault();const items=[...m.querySelectorAll('button')];const i=items.indexOf(document.activeElement);items[(i+(ev.key==='ArrowDown'?1:-1)+items.length)%items.length].focus()}
     return;
   }
-  if(CH&&document.activeElement===CH.box&&(ev.key==='ArrowRight'||ev.key==='ArrowLeft')){ev.preventDefault();const n=CH.pts.length;showPoint(CH.i<0?(ev.key==='ArrowRight'?0:n-1):Math.min(n-1,Math.max(0,CH.i+(ev.key==='ArrowRight'?1:-1))))}
+  // Arrow keys move between team cards
+  if(document.activeElement&&document.activeElement.classList.contains('tab')&&['ArrowRight','ArrowLeft','Home','End'].includes(ev.key)){
+    ev.preventDefault();const i=EMPLOYEES.findIndex(e=>e.id===UI.open),n=EMPLOYEES.length;
+    const j=ev.key==='Home'?0:ev.key==='End'?n-1:(i+(ev.key==='ArrowRight'?1:-1)+n)%n;pick(EMPLOYEES[j].id,true);
+  }
 });
-document.addEventListener('focusout',ev=>{if(CH&&ev.target===CH.box)showPoint(-1)});
-let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{const e=emp(UI.open);if(e)drawChart(e)},120)});
+addEventListener('hashchange',()=>{const e=EMPLOYEES.find(x=>'#'+x.id===location.hash);if(e){pick(e.id);revealTab()}});
 
-render();
+mgmtBar();render();revealTab();
 </script>
 </body>
 </html>
