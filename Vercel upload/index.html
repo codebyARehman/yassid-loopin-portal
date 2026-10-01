@@ -149,6 +149,56 @@ mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
 .stat span{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
 .stat.good b{color:var(--good)} .stat.bad b{color:var(--bad)}
 
+/* Attendance: today, month numbers, calendar, daily check-in and check-out */
+.att{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:24px 28px;display:flex;flex-direction:column;gap:18px}
+.att-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.att-head h2{font-family:var(--serif);font-weight:400;font-size:30px;margin-top:4px}
+.mnav{display:flex;align-items:center;gap:10px}
+.mnav b{min-width:140px;text-align:center;font-size:15px}
+.mbtn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line-2);background:var(--surface);font-size:20px;line-height:1;display:inline-flex;align-items:center;justify-content:center;padding:0 0 2px}
+.mbtn:hover:not(:disabled){border-color:var(--brand)}
+.mbtn:disabled{opacity:.35;cursor:default}
+.today{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-radius:16px;padding:14px 16px;background:var(--surface-2);border:1px solid var(--line)}
+.today .tic{width:42px;height:42px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;flex:none;background:var(--tint);color:var(--muted)}
+.today .tic svg{width:20px;height:20px}
+.today .tx{flex:1;min-width:200px}
+.today .tx b{display:block;font-size:16px}
+.today .tx span{color:var(--muted);font-size:14px}
+.today small{color:var(--muted);font-size:12.5px}
+.today.present .tic{background:var(--good-bg);color:var(--good)} .today.late .tic{background:var(--orange-bg);color:var(--orange)} .today.absent .tic{background:var(--bad-bg);color:var(--bad)} .today.leave .tic{background:var(--grey-bg);color:var(--grey)}
+.stat small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.stat.warn b{color:var(--orange)}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal .wd{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;text-align:center}
+.cell{min-height:60px;border-radius:12px;padding:7px 9px;display:flex;flex-direction:column;justify-content:space-between;gap:4px;border:1px solid transparent;font-size:12px}
+.cell .dn{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:13px}
+.cell .dn svg{width:13px;height:13px}
+.cell .tm{font-weight:700;font-size:12px;font-variant-numeric:tabular-nums}
+.cell.present{background:var(--good-bg);color:var(--good)} .cell.late{background:var(--orange-bg);color:var(--orange)} .cell.absent{background:var(--bad-bg);color:var(--bad)} .cell.leave{background:var(--grey-bg);color:var(--grey)}
+.cell.off,.cell.none{color:var(--muted);opacity:.5}
+.cell.future,.cell.notin{border:1.5px dashed var(--line-2);color:var(--muted)}
+.cell.is-today{box-shadow:0 0 0 2px var(--brand)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);font-weight:700}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.legend i.present{background:var(--good)} .legend i.late{background:var(--orange)} .legend i.absent{background:var(--bad)} .legend i.leave{background:var(--grey)} .legend i.off{border:1.5px dashed var(--line-2)}
+.tw{overflow-x:auto}
+.atable{width:100%;border-collapse:collapse;font-size:14px}
+.atable th{white-space:nowrap;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+.atable td{padding:10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
+.atable tr:last-child td{border-bottom:0}
+.ast{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px}
+.ast svg{width:12px;height:12px}
+.ast.present{background:var(--good-bg);color:var(--good)} .ast.late{background:var(--orange-bg);color:var(--orange)} .ast.absent{background:var(--bad-bg);color:var(--bad)} .ast.leave{background:var(--grey-bg);color:var(--grey)}
+.note{margin:0;font-size:14px;color:var(--muted);background:var(--surface-2);border-radius:12px;padding:10px 14px}
+.linkbtn{background:none;border:0;padding:0;color:var(--brand);font-weight:800;text-decoration:underline}
+.more{align-self:flex-start}
+/* Live status on each team card */
+.tstat{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.tstat::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.tstat.present{background:var(--good-bg);color:var(--good)} .tstat.late{background:var(--orange-bg);color:var(--orange)} .tstat.absent{background:var(--bad-bg);color:var(--bad)} .tstat.leave{background:var(--grey-bg);color:var(--grey)} .tstat.notyet,.tstat.off{background:var(--surface-2);color:var(--muted)}
+.tab[aria-selected="true"] .tstat{background:rgba(255,255,255,.16);color:#fff}
+
 /* Updates: filters, search, timeline */
 #details{display:flex;flex-direction:column;gap:18px}
 .upd-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-top:12px}
@@ -215,6 +265,14 @@ mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
   .mitems li+li{display:none}
   .live .txt{display:none}
   .stats .stat:last-child{grid-column:span 2}
+  .att{padding:20px 16px}
+  .att-head h2{font-size:26px}
+  .mnav b{min-width:120px}
+  .cal{gap:4px}
+  .cell{min-height:42px;padding:5px 6px;border-radius:9px}
+  .cell .tm{display:none}
+  .cell .dn{font-size:12px}
+  .cell .dn svg{width:11px;height:11px}
   .mitems li:first-child{flex:1}
   .mitem small{display:none}
   .mline{flex-direction:column;align-items:flex-start;gap:2px}
@@ -352,6 +410,17 @@ const MGMT=[
   {ago:12,emp:'sara',kind:'talk',title:'One-to-one with Sara',text:'Preparation for her probation review.'},
 ].map((x,i)=>({...x,id:'m'+i,by:'Floor manager'}));
 
+// Attendance (example data). One record per working day from the start date up to today.
+// Leave and absence are set per person as "working days ago" (0 = today); the rest is generated
+// the same way every time, so a given day always shows the same times.
+const SHIFT={start:9*60,lateAfter:9*60+10,len:8*60+30};
+const ATT_PROFILE={
+  ikra:{late:.10,leave:{4:'Sick leave'},absent:[]},
+  hamza:{late:.03,leave:{12:'Annual leave',13:'Annual leave'},absent:[]},
+  sara:{late:.08,lateBefore:{date:'2026-08-01',p:.4},leave:{0:'Annual leave',1:'Annual leave'},absent:[]},
+  bilal:{late:.15,leave:{7:'Sick leave'},absent:[9]},
+};
+
 // ---------- Helpers ----------
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -391,8 +460,8 @@ function openFile(entryId,i){
 }
 
 // ---------- View state: one person open at a time (first by default, or the one in the link) ----------
-const UI={open:(EMPLOYEES.find(e=>'#'+e.id===location.hash)||EMPLOYEES[0]).id,type:'',q:''};
-function pick(id,focus){if(UI.open===id)return;UI.open=id;UI.type='';UI.q='';try{history.replaceState(null,'','#'+id)}catch(e){}render();if(focus){const t=document.getElementById('tab-'+id);t&&t.focus()}}
+const UI={open:(EMPLOYEES.find(e=>'#'+e.id===location.hash)||EMPLOYEES[0]).id,type:'',q:'',attMonth:null,attAll:false};
+function pick(id,focus){if(UI.open===id)return;UI.open=id;UI.type='';UI.q='';UI.attAll=false;try{history.replaceState(null,'','#'+id)}catch(e){}render();if(focus){const t=document.getElementById('tab-'+id);t&&t.focus()}}
 // Keep the selected card visible in the sideways-scrolling team row on phones
 function revealTab(){const t=document.getElementById('tab-'+UI.open),row=t&&t.parentElement;if(row&&row.scrollWidth>row.clientWidth)row.scrollLeft=t.offsetLeft-row.offsetLeft-20}
 
@@ -409,6 +478,86 @@ function mgmtBar(){
 }
 function toggleMgmt(open){const p=$('#mpanel'),b=$('#mall');open=open===undefined?p.hidden:open;p.hidden=!open;b.setAttribute('aria-expanded',String(open));if(open){const r=p.querySelector('.mrow');r&&r.focus()}}
 function openFromMgmt(id){toggleMgmt(false);pick(id);revealTab();const d=$('#details');d&&d.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
+// ---------- Attendance ----------
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const dShort=d=>`${WD[toDate(d).getDay()]} ${+d.slice(8)} ${MON[+d.slice(5,7)-1]}`;
+const isWork=d=>{const w=toDate(d).getDay();return w>0&&w<6};
+const hm=m=>`${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const dur=m=>`${Math.floor(m/60)}h ${pad(m%60)}m`;
+const nowMin=()=>{const d=new Date();return d.getHours()*60+d.getMinutes()};
+function rnd(s){let h=2166136261;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619);h^=h>>>13;h=Math.imul(h,1540483477);h^=h>>>15;return (h>>>0)/4294967296}
+const ATT_ICON={
+  present:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  late:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  absent:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"/></svg>',
+  leave:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6.5a2 2 0 0 1-4 0"/></svg>',
+};
+const ATT_LABEL={present:'Present',late:'Late',absent:'Absent',leave:'Leave'};
+const ATT_CACHE={};
+function attendance(e){
+  const t=isoToday(),key=e.id+t;if(ATT_CACHE[key])return ATT_CACHE[key];
+  const days=[];for(let d=toDate(e.start);isoOf(d)<=t;d.setDate(d.getDate()+1)){const iso=isoOf(d);if(isWork(iso))days.push(iso)}
+  const P=ATT_PROFILE[e.id]||{late:.05,leave:{},absent:[]};const n=days.length;
+  return ATT_CACHE[key]=days.map((date,i)=>{const back=n-1-i;
+    if(P.leave[back])return {date,status:'leave',note:P.leave[back]};
+    if(P.absent.includes(back))return {date,status:'absent',note:'Did not show up, not reported'};
+    const p=P.lateBefore&&date<P.lateBefore.date?P.lateBefore.p:P.late;const late=rnd(e.id+date)<p;
+    const tin=late?SHIFT.lateAfter+6+Math.floor(rnd(date+e.id)*25):SHIFT.start-9+Math.floor(rnd(date+e.id)*17);
+    const tout=tin+SHIFT.len-10+Math.floor(rnd(date+e.id+'out')*35);
+    return {date,status:late?'late':'present',in:tin,out:tout,mins:tout-tin};
+  });
+}
+// Today follows the real clock: not in yet before the check-in time, still working until check-out
+function live(r){if(!r||r.date!==isoToday()||r.in==null)return r;const n=nowMin();if(n<r.in)return {date:r.date,status:'notyet'};if(n<r.out)return {...r,out:null,mins:n-r.in,working:true};return r}
+function todayStatus(e){
+  const t=isoToday();
+  if(t<e.start)return {k:'off',short:'Starts '+dShort(e.start),title:'Not started yet',long:'First day: '+fmt(e.start,{day:'numeric',month:'long'})};
+  if(!isWork(t))return {k:'off',short:'Weekend',title:'Weekend',long:'No shift today'};
+  const r=live(attendance(e).find(x=>x.date===t));
+  if(!r||r.status==='notyet')return {k:'notyet',short:'Not in yet',title:'Not checked in yet',long:`Shift starts at ${hm(SHIFT.start)}`};
+  if(r.status==='leave')return {k:'leave',short:'On leave',title:'On leave',long:r.note};
+  if(r.status==='absent')return {k:'absent',short:'Absent',title:'Absent',long:r.note};
+  const late=r.status==='late'?' · late':'';
+  if(r.working)return {k:r.status,short:`In since ${hm(r.in)}`,title:r.status==='late'?'Present · arrived late':'Present',long:`Checked in ${hm(r.in)}${late} · working now, ${dur(r.mins)} so far`};
+  return {k:r.status,short:`Out ${hm(r.out)}`,title:r.status==='late'?'Present · arrived late':'Present',long:`Checked in ${hm(r.in)}${late} · checked out ${hm(r.out)} · ${dur(r.mins)}`};
+}
+function setAttMonth(m){if(!m)return;UI.attMonth=m;UI.attAll=false;renderDetails()}
+function attendanceHTML(e){
+  const t=isoToday();const all=attendance(e).map(live);const ts=todayStatus(e);
+  const months=[...new Set(all.map(r=>r.date.slice(0,7)))];
+  const todayBox=`<div class="today ${ts.k}"><span class="tic">${ATT_ICON[ts.k]||ATT_ICON.late}</span><div class="tx"><b>Today: ${esc(ts.title)}</b><span>${esc(ts.long)}</span></div><small>Shift ${hm(SHIFT.start)} – ${hm(SHIFT.start+SHIFT.len)} · times in your time zone</small></div>`;
+  const head=(nav)=>`<div class="att-head"><div><div class="eyebrow">Attendance</div><h2 id="att-h">Present &amp; absent</h2></div>${nav}</div>`;
+  if(!months.length)return `<section class="att" aria-labelledby="att-h">${head('')}${todayBox}</section>`;
+  const ym=months.includes(UI.attMonth)?UI.attMonth:months[months.length-1];const mi=months.indexOf(ym);
+  const monthName=m=>fmt(m+'-01',{month:'long',year:'numeric'});
+  const recs=all.filter(r=>r.date.slice(0,7)===ym&&r.status!=='notyet');const n=k=>recs.filter(r=>r.status===k).length;
+  const done=recs.filter(r=>r.mins&&!r.working);const avg=done.length?Math.round(done.reduce((a,r)=>a+r.mins,0)/done.length):null;
+  const ins=recs.filter(r=>r.in!=null);const avgIn=ins.length?Math.round(ins.reduce((a,r)=>a+r.in,0)/ins.length):null;
+  // Month calendar, Monday first
+  const first=toDate(ym+'-01');const lead=(first.getDay()+6)%7;const dim=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
+  const byDate=Object.fromEntries(all.filter(r=>r.date.slice(0,7)===ym).map(r=>[r.date,r]));
+  let cells=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(w=>`<div class="wd" aria-hidden="true">${w}</div>`).join('')+'<div aria-hidden="true"></div>'.repeat(lead);
+  for(let d=1;d<=dim;d++){const iso=`${ym}-${pad(d)}`,r=byDate[iso];let cls,ic='',tm='',tip=dShort(iso);
+    if(!isWork(iso)){cls='off';tip+=' · weekend'}
+    else if(iso<e.start){cls='none';tip+=' · before first day'}
+    else if(iso>t){cls='future';tip+=' · upcoming'}
+    else if(!r||r.status==='notyet'){cls='notin';tip+=' · not checked in yet'}
+    else{cls=r.status;ic=ATT_ICON[r.status];tm=r.in!=null?hm(r.in):ATT_LABEL[r.status];tip+=` · ${r.status==='leave'?r.note:ATT_LABEL[r.status]}${r.in!=null?` · ${hm(r.in)} – ${r.out!=null?hm(r.out):'now'}`:''}`}
+    cells+=`<div class="cell ${cls}${iso===t?' is-today':''}" title="${esc(tip)}"><span class="dn">${d}${ic}</span>${tm?`<span class="tm">${tm}</span>`:''}</div>`}
+  // Daily list, newest first
+  const rows=recs.slice().reverse();const shown=UI.attAll?rows:rows.slice(0,5);
+  const tr=shown.map(r=>`<tr><td>${dShort(r.date)}${r.date===t?' (today)':''}</td><td><span class="ast ${r.status}">${ATT_ICON[r.status]}${esc(r.status==='leave'?r.note:ATT_LABEL[r.status])}</span></td><td>${r.in!=null?hm(r.in):'—'}</td><td>${r.in!=null?(r.out!=null?hm(r.out):'Working now'):'—'}</td><td>${r.mins?dur(r.mins):'—'}</td></tr>`).join('');
+  const early=mi===months.length-1&&mi>0&&recs.length<5;
+  const nav=`<div class="mnav"><button type="button" class="mbtn" onclick="setAttMonth('${months[mi-1]||''}')" ${mi>0?'':'disabled'} aria-label="Previous month">‹</button><b>${monthName(ym)}</b><button type="button" class="mbtn" onclick="setAttMonth('${months[mi+1]||''}')" ${mi<months.length-1?'':'disabled'} aria-label="Next month">›</button></div>`;
+  return `<section class="att" aria-labelledby="att-h">${head(nav)}${todayBox}
+  <div class="stats"><div class="stat good"><b>${n('present')+n('late')}</b><span>Days present</span></div><div class="stat warn"><b>${n('late')}</b><span>Late arrivals</span></div><div class="stat bad"><b>${n('absent')}</b><span>Absent</span></div><div class="stat"><b>${n('leave')}</b><span>Leave days</span></div><div class="stat"><b>${avg?dur(avg):'–'}</b><span>Average day</span>${avgIn!=null?`<small>Check-in ${hm(avgIn)} on average</small>`:''}</div></div>
+  ${early?`<p class="note">${monthName(ym)} has just started. <button type="button" class="linkbtn" onclick="setAttMonth('${months[mi-1]}')">See ${fmt(months[mi-1]+'-01',{month:'long'})}</button> for a full month.</p>`:''}
+  <div class="cal" aria-label="${monthName(ym)} attendance calendar">${cells}</div>
+  <div class="legend" aria-hidden="true"><span><i class="present"></i>Present</span><span><i class="late"></i>Late (after ${hm(SHIFT.lateAfter)})</span><span><i class="absent"></i>Absent</span><span><i class="leave"></i>Leave</span><span><i class="off"></i>Upcoming</span></div>
+  <div class="tw"><table class="atable"><thead><tr><th>Day</th><th>Status</th><th>Check-in</th><th>Check-out</th><th>Hours</th></tr></thead><tbody>${tr||'<tr><td colspan="5">No working days yet this month.</td></tr>'}</tbody></table></div>
+  ${rows.length>5?`<button type="button" class="chip more" onclick="UI.attAll=!UI.attAll;renderDetails()">${UI.attAll?'Show fewer days':`Show all ${rows.length} days`}</button>`:''}
+  </section>`;
+}
 function setType(t){UI.type=t;renderDetails()}
 function setQ(v){UI.q=v;$('#tl').innerHTML=timelineHTML(emp(UI.open))}
 
@@ -416,7 +565,9 @@ function setQ(v){UI.q=v;$('#tl').innerHTML=timelineHTML(emp(UI.open))}
 function summaryHTML(){
   const t=isoToday(),from=isoOf(new Date(toDate(t).getTime()-30*86400000));
   const recent=ENTRIES.filter(x=>x.date>from&&x.date<=t);const c=k=>recent.filter(x=>x.type===k).length;
+  const st=EMPLOYEES.map(todayStatus);const here=st.filter(s=>s.k==='present'||s.k==='late').length;const weekend=!isWork(t);
   return `<div class="summary-head"><b>Last 30 days</b><span>${plural(EMPLOYEES.length,'person','people')}</span></div>
+  <div class="srow"><span class="ic good" aria-hidden="true">${ATT_ICON.present}</span><span>Present today</span><b>${weekend?'Weekend':`${here} of ${EMPLOYEES.length}`}</b></div>
   <div class="srow"><span class="ic good" aria-hidden="true">▲</span><span>Great work</span><b>${c('great')}</b></div>
   <div class="srow"><span class="ic bad" aria-hidden="true">!</span><span>Warnings</span><b>${c('warning')}</b></div>
   <div class="srow"><span class="ic grey" aria-hidden="true">✎</span><span>All updates</span><b>${recent.length}</b></div>
@@ -424,7 +575,7 @@ function summaryHTML(){
 }
 function tabHTML(p){
   const t=isoToday();const lu=lastUpdate(p.id);const d=lu?diffDays(t,lu):null;const all=entriesOf(p.id);const g=all.filter(x=>x.type==='great').length,w=all.filter(x=>x.type==='warning').length;const on=UI.open===p.id;
-  return `<button type="button" class="tab" role="tab" id="tab-${p.id}" aria-selected="${on}" aria-controls="details" tabindex="${on?0:-1}" onclick="pick('${p.id}')"><span class="tab-top"><span class="av">${esc(ini(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.role)}</small></span></span><span class="tab-foot"><span>${d===null?'No updates yet':'Updated '+ago(d)}</span><span class="tally"><span title="Great work"><i class="dot green"></i>${g}</span><span title="Warnings"><i class="dot red"></i>${w}</span></span></span></button>`;
+  return `<button type="button" class="tab" role="tab" id="tab-${p.id}" aria-selected="${on}" aria-controls="details" tabindex="${on?0:-1}" onclick="pick('${p.id}')"><span class="tab-top"><span class="av">${esc(ini(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.role)}</small></span></span>${(()=>{const s=todayStatus(p);return `<span class="tstat ${s.k}">${esc(s.short)}</span>`})()}<span class="tab-foot"><span>${d===null?'No updates yet':'Updated '+ago(d)}</span><span class="tally"><span title="Great work"><i class="dot green"></i>${g}</span><span title="Warnings"><i class="dot red"></i>${w}</span></span></span></button>`;
 }
 function entryHTML(x){
   const T=TYPES[x.type]||TYPES.update;const planned=x.date>isoToday();
@@ -454,6 +605,7 @@ function detailsHTML(e){
       return `<div class="mline"><span class="pulse" aria-hidden="true"></span><b>Management</b><span>${esc(last.title)} · ${mWhen(last)}</span><span class="sep">|</span><span>${ck?'Last check-in '+mWhen(ck):'No check-in yet'}</span><span class="sep">|</span><span>${plural(ap,'appreciation')} in the last 30 days</span></div>`})()}
     <div class="stats"><div class="stat"><b>${Math.max(0,dn)}</b><span>Days with us</span></div><div class="stat good"><b>${cnt('great')}</b><span>Great work</span></div><div class="stat bad"><b>${cnt('warning')}</b><span>Warnings</span></div><div class="stat"><b>${all.length}</b><span>Updates</span></div><div class="stat"><b>${sd===null?'–':sd===0?'Today':sd+'d'}</b><span>Since last update</span></div></div>
   </section>
+  ${attendanceHTML(e)}
   <div class="upd-head"><div><div class="eyebrow">Updates</div><h2>What happened</h2></div>
     <div class="tools"><button type="button" class="chip" aria-pressed="${!UI.type}" onclick="setType('')">All<span>${all.length}</span></button><div class="fwrap"><button type="button" class="chip fbtn" id="fbtn" aria-pressed="${!!UI.type}" aria-haspopup="menu" aria-expanded="false" aria-controls="fmenu" onclick="toggleMenu()">${ICON.funnel}${UI.type?`${TYPES[UI.type].label}<span>${counts[UI.type]||0}</span>`:'Filter'}${ICON.chev}</button><div class="fmenu" id="fmenu" role="menu" aria-label="Filter by type" hidden>${menu}</div></div>
     <div class="search">${ICON.search}<input id="q" type="search" placeholder="Search what happened…" value="${esc(UI.q)}" oninput="setQ(this.value)" aria-label="Search what happened"></div></div></div>
