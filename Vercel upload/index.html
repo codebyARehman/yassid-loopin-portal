@@ -150,9 +150,36 @@ mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
 .stat.good b{color:var(--good)} .stat.bad b{color:var(--bad)}
 
 /* Attendance: today, month numbers, calendar, daily check-in and check-out */
-.att{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:24px 28px;display:flex;flex-direction:column;gap:18px}
-.att-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
-.att-head h2{font-family:var(--serif);font-weight:400;font-size:30px;margin-top:4px}
+.att{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:22px 28px;display:flex;flex-direction:column}
+/* Collapsed by default: only the "Attendance" header shows until the client opens it */
+.att-h{margin:0}
+.att-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;background:none;border:0;padding:0;text-align:left;color:inherit;border-radius:12px}
+.att-toggle .t{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.15}
+.att-hint{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:13px;font-weight:800;color:var(--brand-dark);background:var(--tint);border-radius:999px;padding:7px 14px;white-space:nowrap}
+.att-hint .chev{width:14px;height:14px;transition:transform .2s}
+.att-toggle[aria-expanded="true"] .att-hint .chev{transform:rotate(180deg)}
+.att-toggle:hover .att-hint{background:var(--line-2)}
+.att-body{display:flex;flex-direction:column;gap:18px;margin-top:18px;animation:fade .2s ease-out}
+.att-month{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.att-month>span{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+/* Name with live badge, and today's check-in next to it */
+.name-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
+.name-row h2{margin-top:0}
+.actb{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.actb i{position:relative;width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.actb.on{background:var(--good-bg);color:var(--good);border-color:transparent}
+.actb.on i::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid currentColor;opacity:0;animation:ping 2s ease-out infinite}
+.actb.absent{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+.tday{display:flex;align-items:stretch;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.tday-h{display:flex;align-items:center;padding:0 14px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);border-right:1px solid var(--line)}
+.tday>div{padding:8px 16px;border-right:1px solid var(--line);min-width:92px}
+.tday>div:last-child{border-right:0}
+.tday small{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.tday b{display:block;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tday b.late{color:var(--orange)}
+.tday b.working{color:var(--good)}
+.tstat.pulsing::before{animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{50%{opacity:.3}}
 .mnav{display:flex;align-items:center;gap:10px}
 .mnav b{min-width:140px;text-align:center;font-size:15px}
 .mbtn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line-2);background:var(--surface);font-size:20px;line-height:1;display:inline-flex;align-items:center;justify-content:center;padding:0 0 2px}
@@ -265,8 +292,11 @@ mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
   .mitems li+li{display:none}
   .live .txt{display:none}
   .stats .stat:last-child{grid-column:span 2}
-  .att{padding:20px 16px}
-  .att-head h2{font-size:26px}
+  .att{padding:18px 16px}
+  .att-toggle .t{font-size:26px}
+  .tday{width:100%;flex-wrap:wrap}
+  .tday-h{width:100%;padding:6px 12px;border-right:0;border-bottom:1px solid var(--line)}
+  .tday>div{flex:1;min-width:0;padding:8px 10px}
   .mnav b{min-width:120px}
   .cal{gap:4px}
   .cell{min-height:42px;padding:5px 6px;border-radius:9px}
@@ -460,7 +490,7 @@ function openFile(entryId,i){
 }
 
 // ---------- View state: one person open at a time (first by default, or the one in the link) ----------
-const UI={open:(EMPLOYEES.find(e=>'#'+e.id===location.hash)||EMPLOYEES[0]).id,type:'',q:'',attMonth:null,attAll:false};
+const UI={open:(EMPLOYEES.find(e=>'#'+e.id===location.hash)||EMPLOYEES[0]).id,type:'',q:'',attMonth:null,attAll:false,attOpen:false};
 function pick(id,focus){if(UI.open===id)return;UI.open=id;UI.type='';UI.q='';UI.attAll=false;try{history.replaceState(null,'','#'+id)}catch(e){}render();if(focus){const t=document.getElementById('tab-'+id);t&&t.focus()}}
 // Keep the selected card visible in the sideways-scrolling team row on phones
 function revealTab(){const t=document.getElementById('tab-'+UI.open),row=t&&t.parentElement;if(row&&row.scrollWidth>row.clientWidth)row.scrollLeft=t.offsetLeft-row.offsetLeft-20}
@@ -518,16 +548,29 @@ function todayStatus(e){
   if(r.status==='leave')return {k:'leave',short:'On leave',title:'On leave',long:r.note};
   if(r.status==='absent')return {k:'absent',short:'Absent',title:'Absent',long:r.note};
   const late=r.status==='late'?' · late':'';
-  if(r.working)return {k:r.status,short:`In since ${hm(r.in)}`,title:r.status==='late'?'Present · arrived late':'Present',long:`Checked in ${hm(r.in)}${late} · working now, ${dur(r.mins)} so far`};
-  return {k:r.status,short:`Out ${hm(r.out)}`,title:r.status==='late'?'Present · arrived late':'Present',long:`Checked in ${hm(r.in)}${late} · checked out ${hm(r.out)} · ${dur(r.mins)}`};
+  if(r.working)return {k:r.status,working:true,rec:r,short:`In since ${hm(r.in)}`,title:r.status==='late'?'Present · arrived late':'Present',long:`Checked in ${hm(r.in)}${late} · working now, ${dur(r.mins)} so far`};
+  return {k:r.status,rec:r,short:`Out ${hm(r.out)}`,title:r.status==='late'?'Present · arrived late':'Present',long:`Checked in ${hm(r.in)}${late} · checked out ${hm(r.out)} · ${dur(r.mins)}`};
+}
+// Small badge next to the name: "Active" while the person is working right now
+function activeBadge(ts){
+  const [cls,txt]=ts.working?['on','Active']:ts.rec?['','Checked out']:ts.k==='absent'?['absent','Absent']:ts.k==='leave'?['','On leave']:ts.k==='notyet'?['','Not in yet']:['',ts.short];
+  return `<span class="actb ${cls}" title="${esc(ts.long)}"><i aria-hidden="true"></i>${esc(txt)}</span>`;
+}
+// Today's check-in, check-out and hours, shown beside the name
+function todayStrip(ts){
+  const r=ts.rec;
+  if(r)return `<div class="tday" aria-label="Today's attendance"><span class="tday-h">Today</span><div><small>Check-in${r.status==='late'?' · late':''}</small><b class="${r.status==='late'?'late':''}">${hm(r.in)}</b></div><div><small>Check-out</small><b class="${r.working?'working':''}">${r.working?'Working':hm(r.out)}</b></div><div><small>${r.working?'So far':'Hours'}</small><b>${dur(r.mins)}</b></div></div>`;
+  return `<div class="tday" aria-label="Today's attendance"><span class="tday-h">Today</span><div><small>Status</small><b>${esc(ts.title)}</b></div><div><small>Details</small><b>${esc(ts.long)}</b></div></div>`;
 }
 function setAttMonth(m){if(!m)return;UI.attMonth=m;UI.attAll=false;renderDetails()}
+function toggleAtt(){UI.attOpen=!UI.attOpen;renderDetails();const b=document.querySelector('.att-toggle');b&&b.focus()}
 function attendanceHTML(e){
   const t=isoToday();const all=attendance(e).map(live);const ts=todayStatus(e);
   const months=[...new Set(all.map(r=>r.date.slice(0,7)))];
   const todayBox=`<div class="today ${ts.k}"><span class="tic">${ATT_ICON[ts.k]||ATT_ICON.late}</span><div class="tx"><b>Today: ${esc(ts.title)}</b><span>${esc(ts.long)}</span></div><small>Shift ${hm(SHIFT.start)} – ${hm(SHIFT.start+SHIFT.len)} · times in your time zone</small></div>`;
-  const head=(nav)=>`<div class="att-head"><div><div class="eyebrow">Attendance</div><h2 id="att-h">Present &amp; absent</h2></div>${nav}</div>`;
-  if(!months.length)return `<section class="att" aria-labelledby="att-h">${head('')}${todayBox}</section>`;
+  const head=`<h2 class="att-h" id="att-h"><button type="button" class="att-toggle" aria-expanded="${UI.attOpen}" aria-controls="att-body" onclick="toggleAtt()"><span class="t">Attendance</span><span class="att-hint">${UI.attOpen?'Hide details':'Show details'}${ICON.chev}</span></button></h2>`;
+  const wrap=body=>`<section class="att" aria-labelledby="att-h">${head}<div class="att-body" id="att-body"${UI.attOpen?'':' hidden'}>${body}</div></section>`;
+  if(!months.length)return wrap(todayBox);
   const ym=months.includes(UI.attMonth)?UI.attMonth:months[months.length-1];const mi=months.indexOf(ym);
   const monthName=m=>fmt(m+'-01',{month:'long',year:'numeric'});
   const recs=all.filter(r=>r.date.slice(0,7)===ym&&r.status!=='notyet');const n=k=>recs.filter(r=>r.status===k).length;
@@ -549,14 +592,14 @@ function attendanceHTML(e){
   const tr=shown.map(r=>`<tr><td>${dShort(r.date)}${r.date===t?' (today)':''}</td><td><span class="ast ${r.status}">${ATT_ICON[r.status]}${esc(r.status==='leave'?r.note:ATT_LABEL[r.status])}</span></td><td>${r.in!=null?hm(r.in):'—'}</td><td>${r.in!=null?(r.out!=null?hm(r.out):'Working now'):'—'}</td><td>${r.mins?dur(r.mins):'—'}</td></tr>`).join('');
   const early=mi===months.length-1&&mi>0&&recs.length<5;
   const nav=`<div class="mnav"><button type="button" class="mbtn" onclick="setAttMonth('${months[mi-1]||''}')" ${mi>0?'':'disabled'} aria-label="Previous month">‹</button><b>${monthName(ym)}</b><button type="button" class="mbtn" onclick="setAttMonth('${months[mi+1]||''}')" ${mi<months.length-1?'':'disabled'} aria-label="Next month">›</button></div>`;
-  return `<section class="att" aria-labelledby="att-h">${head(nav)}${todayBox}
+  return wrap(`${todayBox}
+  <div class="att-month"><span>Month overview</span>${nav}</div>
   <div class="stats"><div class="stat good"><b>${n('present')+n('late')}</b><span>Days present</span></div><div class="stat warn"><b>${n('late')}</b><span>Late arrivals</span></div><div class="stat bad"><b>${n('absent')}</b><span>Absent</span></div><div class="stat"><b>${n('leave')}</b><span>Leave days</span></div><div class="stat"><b>${avg?dur(avg):'–'}</b><span>Average day</span>${avgIn!=null?`<small>Check-in ${hm(avgIn)} on average</small>`:''}</div></div>
   ${early?`<p class="note">${monthName(ym)} has just started. <button type="button" class="linkbtn" onclick="setAttMonth('${months[mi-1]}')">See ${fmt(months[mi-1]+'-01',{month:'long'})}</button> for a full month.</p>`:''}
   <div class="cal" aria-label="${monthName(ym)} attendance calendar">${cells}</div>
   <div class="legend" aria-hidden="true"><span><i class="present"></i>Present</span><span><i class="late"></i>Late (after ${hm(SHIFT.lateAfter)})</span><span><i class="absent"></i>Absent</span><span><i class="leave"></i>Leave</span><span><i class="off"></i>Upcoming</span></div>
   <div class="tw"><table class="atable"><thead><tr><th>Day</th><th>Status</th><th>Check-in</th><th>Check-out</th><th>Hours</th></tr></thead><tbody>${tr||'<tr><td colspan="5">No working days yet this month.</td></tr>'}</tbody></table></div>
-  ${rows.length>5?`<button type="button" class="chip more" onclick="UI.attAll=!UI.attAll;renderDetails()">${UI.attAll?'Show fewer days':`Show all ${rows.length} days`}</button>`:''}
-  </section>`;
+  ${rows.length>5?`<button type="button" class="chip more" onclick="UI.attAll=!UI.attAll;renderDetails()">${UI.attAll?'Show fewer days':`Show all ${rows.length} days`}</button>`:''}`);
 }
 function setType(t){UI.type=t;renderDetails()}
 function setQ(v){UI.q=v;$('#tl').innerHTML=timelineHTML(emp(UI.open))}
@@ -575,7 +618,7 @@ function summaryHTML(){
 }
 function tabHTML(p){
   const t=isoToday();const lu=lastUpdate(p.id);const d=lu?diffDays(t,lu):null;const all=entriesOf(p.id);const g=all.filter(x=>x.type==='great').length,w=all.filter(x=>x.type==='warning').length;const on=UI.open===p.id;
-  return `<button type="button" class="tab" role="tab" id="tab-${p.id}" aria-selected="${on}" aria-controls="details" tabindex="${on?0:-1}" onclick="pick('${p.id}')"><span class="tab-top"><span class="av">${esc(ini(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.role)}</small></span></span>${(()=>{const s=todayStatus(p);return `<span class="tstat ${s.k}">${esc(s.short)}</span>`})()}<span class="tab-foot"><span>${d===null?'No updates yet':'Updated '+ago(d)}</span><span class="tally"><span title="Great work"><i class="dot green"></i>${g}</span><span title="Warnings"><i class="dot red"></i>${w}</span></span></span></button>`;
+  return `<button type="button" class="tab" role="tab" id="tab-${p.id}" aria-selected="${on}" aria-controls="details" tabindex="${on?0:-1}" onclick="pick('${p.id}')"><span class="tab-top"><span class="av">${esc(ini(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.role)}</small></span></span>${(()=>{const s=todayStatus(p);return `<span class="tstat ${s.k}${s.working?' pulsing':''}">${esc(s.short)}</span>`})()}<span class="tab-foot"><span>${d===null?'No updates yet':'Updated '+ago(d)}</span><span class="tally"><span title="Great work"><i class="dot green"></i>${g}</span><span title="Warnings"><i class="dot red"></i>${w}</span></span></span></button>`;
 }
 function entryHTML(x){
   const T=TYPES[x.type]||TYPES.update;const planned=x.date>isoToday();
@@ -600,7 +643,7 @@ function detailsHTML(e){
   const counts={};all.forEach(x=>counts[x.type]=(counts[x.type]||0)+1);
   const menu=ORDER.map(k=>`<button type="button" role="menuitemradio" aria-checked="${UI.type===k}" onclick="setType('${k}')"><span class="tick">${UI.type===k?'✓':''}</span><span class="dot ${TYPES[k].cls}"></span>${TYPES[k].label}<span class="n">${counts[k]||0}</span></button>`).join('');
   return `<section class="profile" aria-labelledby="who-name">
-    <div class="who"><span class="av">${esc(ini(e.name))}</span><div class="who-txt"><div class="eyebrow started">${ICON.cal}${dn>=0?`Started ${fmt(e.start,{day:'numeric',month:'long',year:'numeric'})} · Day ${dn}`:`Starts ${fmt(e.start,{day:'numeric',month:'long',year:'numeric'})}`}</div><h2 id="who-name">${esc(e.name)}</h2><p>${esc(e.role)} at ${esc(CLIENT)}</p></div><span class="fresh">${sd===null?'No updates yet':'Last update '+ago(sd)}</span></div>
+    <div class="who"><span class="av">${esc(ini(e.name))}</span><div class="who-txt"><div class="eyebrow started">${ICON.cal}${dn>=0?`Started ${fmt(e.start,{day:'numeric',month:'long',year:'numeric'})} · Day ${dn}`:`Starts ${fmt(e.start,{day:'numeric',month:'long',year:'numeric'})}`}</div><div class="name-row"><h2 id="who-name">${esc(e.name)}</h2>${activeBadge(todayStatus(e))}</div><p>${esc(e.role)} at ${esc(CLIENT)}</p></div>${todayStrip(todayStatus(e))}<span class="fresh">${sd===null?'No updates yet':'Last update '+ago(sd)}</span></div>
     ${(()=>{const ms=mgmtOf(e.id);if(!ms.length)return '';const last=ms[0];const ap=ms.filter(m=>m.kind==='appreciate'&&m.ago<30).length;const ck=ms.filter(m=>m.kind==='check').sort((a,b)=>a.ago-b.ago)[0];
       return `<div class="mline"><span class="pulse" aria-hidden="true"></span><b>Management</b><span>${esc(last.title)} · ${mWhen(last)}</span><span class="sep">|</span><span>${ck?'Last check-in '+mWhen(ck):'No check-in yet'}</span><span class="sep">|</span><span>${plural(ap,'appreciation')} in the last 30 days</span></div>`})()}
     <div class="stats"><div class="stat"><b>${Math.max(0,dn)}</b><span>Days with us</span></div><div class="stat good"><b>${cnt('great')}</b><span>Great work</span></div><div class="stat bad"><b>${cnt('warning')}</b><span>Warnings</span></div><div class="stat"><b>${all.length}</b><span>Updates</span></div><div class="stat"><b>${sd===null?'–':sd===0?'Today':sd+'d'}</b><span>Since last update</span></div></div>
